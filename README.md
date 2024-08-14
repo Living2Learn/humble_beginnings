@@ -1,2 +1,0 @@
-# humble_beginnings
- collection_of_my_beginning_work
