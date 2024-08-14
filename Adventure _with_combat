@@ -1,0 +1,693 @@
+import sys
+import random
+import time
+import os
+from die_rolls import Rolls
+
+def clear():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+class Player():
+    def attack():
+        attack = Rolls.di20(1)
+        return attack
+
+    def defense():
+        defense = Rolls.di20(1)
+        return defense
+
+    def damage():
+        damage = Rolls.di6(3)
+        return damage
+
+def initiative():
+    go = random.randint(0, 2)
+    if go == 0:
+        return 'Enemy'
+    else:
+        return name
+
+
+enemy = ['Spiderling', 'Spider', 'Large Spider']
+
+# plan to input premade character here
+name = input("\nPlease enter your name: ")
+
+player = Player()
+comp = Player()
+
+a = 2
+b = 0.2
+c = 0.08
+
+clear()
+
+while True:
+    try:
+        age = int(input("How old are you? "))
+        clear()
+        break
+    except ValueError:
+        print("\n*Please enter an integer value only.\n*")
+
+age = int(age)
+
+if age <= 0:
+    print("You haven't been born yet!")
+    time.sleep(1)
+    clear()
+
+elif 17 >= age >= 1:
+    print()
+    s = "You Shall Not Pass!"
+    for character in s:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        time.sleep(c)
+    print()
+    time.sleep(1)
+    print("Goodbye")
+    time.sleep(1)
+    clear()
+
+elif 18 <= age <= 99:
+    print()
+    s = "You may pass!"
+    for character in s:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        time.sleep(c)
+    time.sleep(1)
+    clear()
+
+elif age == 100:
+    print("You are a century old!")
+    time.sleep(1)
+    clear()
+
+elif age > 100:
+    print("You are too old to be here!")
+    time.sleep(1)
+    clear()
+
+if age >= 18:
+    print()
+    s = "Welcome to the Cave of Codingness!"
+    for character in s:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        time.sleep(c)
+    print()
+    time.sleep(0.5)
+    clear()
+
+    while True:
+        s = "Would you like to play the game? "
+        for character in s:
+            sys.stdout.write(character)
+            sys.stdout.flush()
+            time.sleep(c)
+        print()
+        answer = input("(yes/no) ").lower().strip()
+        if answer.startswith("y"):
+            clear()
+
+            s = "You reach the cave, would you like to enter? "
+            for character in s:
+                sys.stdout.write(character)
+                sys.stdout.flush()
+                time.sleep(c)
+            print()
+
+            answer = input("(yes/no) ").lower().strip()
+            if answer.startswith("y"):
+                clear()
+                s = ("The door opens and you can smell the stale air as it blows past you.\n"
+                     "You enter the  first chamber which seems oddly dry and quiet.\n"
+                     "You hear a noise above and behind you. As you turn and look, you see a giant\n"
+                     "spider descending from the ceiling and blocking your exit.\n"
+                     "Would you like to run or attack? ")
+                for character in s:
+                    sys.stdout.write(character)
+                    sys.stdout.flush()
+                    time.sleep(c)
+                print()
+                answer = input("(run/attack) ").lower().strip()
+                clear()
+                if answer.startswith("r"):
+                    s = ("Good choice, you safely evade the spider, for now.\n"
+                         "You can only hope that there is another way\n"
+                         "out and no other spiders or spiderlings to contend with!")
+                    for character in s:
+                        sys.stdout.write(character)
+                        sys.stdout.flush()
+                        time.sleep(c)
+                    time.sleep(1)
+                    clear()
+
+                else:
+                    s = "The spider is faster than you could have imagined. You see fangs, the fight is on!."
+                    for character in s:
+                        sys.stdout.write(character)
+                        sys.stdout.flush()
+                        time.sleep(c)
+                    print()
+                    time.sleep(1)
+                    clear()
+
+                    turn = initiative()
+
+                    player_hp = 50
+                    comp_hp = 40
+
+                    player = Player()
+                    comp = Player()
+
+                    print(f"{name} has {player_hp} health.")
+                    print(f"{enemy[1]} has {comp_hp} health.")
+                    time.sleep(2)
+                    
+                    while player_hp > 0 and comp_hp > 0:
+                        print(f"\n{turn}'s turn")
+                        time.sleep(2)
+                        if turn != 'Enemy':
+                            player_attack = Player.attack()
+                            print(f"{name}'s Attack: {player_attack}")
+                            comp_defense = Player.defense()
+                            print(f"{enemy[1]}'s Defense: {comp_defense}")
+                            if player_attack > comp_defense:
+                                damage = Player.damage()
+                                comp_hp = comp_hp - damage
+                                time.sleep(2)
+                                print(f"\n{name} just did {damage} damage!")
+                                time.sleep(2)
+                                print(f"\n{name} has {player_hp} health.")
+                                print(f"The {enemy[1]} now has {comp_hp} health.")
+                                time.sleep(2)
+                                turn = 'Enemy'
+                            else:
+                                print(f"{name} missed the {enemy[1]}!")
+                                time.sleep(2)
+                                turn = 'Enemy'
+                        else:
+                            comp_attack = Player.attack()
+                            print(f"{enemy[1]}'s Attack: {comp_attack}")
+                            player_defense = Player.defense()
+                            print(f"{name}'s Defense: {player_defense}")
+                            if comp_attack > player_defense:
+                                damage = Player.damage()
+                                player_hp = player_hp - damage
+                                time.sleep(2)
+                                print(f"\n{enemy[1]} just did {damage} damage!")
+                                time.sleep(2)
+                                print(f"\n{enemy[1]} has {comp_hp} health.")
+                                print(f"The {name} now has {player_hp} health.")
+                                time.sleep(2)
+                                turn = name
+                            else:
+                                print(f"Enemy missed {name}!")
+                                turn = name
+                    if player_hp <= 0:
+                        print("\nThe Enemy has won!"
+                              "\nGame Over")
+                        input()
+                        break
+                    elif comp_hp <= 0:
+                        print(f"\n{name} has won!")
+                    input()
+                    clear()
+
+                s = "The cave narrows and splits in two directions, would you like to go right or left? "
+                for character in s:
+                    sys.stdout.write(character)
+                    sys.stdout.flush()
+                    time.sleep(c)
+                print()
+                answer = input("(left/right) ").lower().strip()
+                clear()
+                if answer.startswith("r"):
+                    s = ("You walk into a dead end chamber, you see an old rickety chest in the back corner, "
+                         "will you open it? ")
+                    for character in s:
+                        sys.stdout.write(character)
+                        sys.stdout.flush()
+                        time.sleep(c)
+                    print()
+                    answer = input("(yes/no)").lower().strip()
+                    clear()
+                    if answer.startswith("y"):
+                        s = (
+                            "You discover an enormous gem and you can only think that you will never have to work "
+                            "again!\n"
+                            "You go to leave the cave and live happily ever after!\n"
+                            "Except you forgot about the spider at the entrance.\n"
+                            "You are distracted by this wondrous gem when the spider comes out of nowhere.\n"
+                            "You see fangs glint from the darkness darkness.\n"
+                            "The fight is on!")
+                        for character in s:
+                            sys.stdout.write(character)
+                            sys.stdout.flush()
+                            time.sleep(c)
+                        clear()
+
+                        player_hp = 50
+                        comp_hp = 40
+
+                        print(f"{name} has {player_hp} health.")
+                        print(f"{enemy[1]} has {comp_hp} health.")
+                        time.sleep(2)
+                    
+                        while player_hp > 0 and comp_hp > 0:
+                            print(f"\n{turn}'s turn")
+                            time.sleep(2)
+                            if turn != 'Enemy':
+                                player_attack = Player.attack()
+                                print(f"{name}'s Attack: {player_attack}")
+                                comp_defense = Player.defense()
+                                print(f"{enemy[1]}'s Defense: {comp_defense}")
+                                if player_attack > comp_defense:
+                                    damage = Player.damage()
+                                    comp_hp = comp_hp - damage
+                                    time.sleep(2)
+                                    print(f"\n{name} just did {damage} damage!")
+                                    time.sleep(2)
+                                    print(f"\n{name} has {player_hp} health.")
+                                    print(f"The {enemy[1]} now has {comp_hp} health.")
+                                    time.sleep(2)
+                                    turn = 'Enemy'
+                                else:
+                                    print(f"{name} missed the {enemy[1]}!")
+                                    time.sleep(2)
+                                    turn = 'Enemy'
+                            else:
+                                comp_attack = Player.attack()
+                                print(f"{enemy[1]}'s Attack: {comp_attack}")
+                                player_defense = Player.defense()
+                                print(f"{name}'s Defense: {player_defense}")
+                                if comp_attack > player_defense:
+                                    damage = Player.damage()
+                                    player_hp = player_hp - damage
+                                    time.sleep(2)
+                                    print(f"\n{enemy[1]} just did {damage} damage!")
+                                    time.sleep(2)
+                                    print(f"\n{enemy[1]} has {comp_hp} health.")
+                                    print(f"The {name} now has {player_hp} health.")
+                                    time.sleep(2)
+                                    turn = name
+                                else:
+                                    print(f"Enemy missed {name}!")
+                                    turn = name
+                        if player_hp <= 0:
+                            print("\nThe Enemy has won!"
+                                "\nGame Over")
+                            input()
+                            break
+                        elif comp_hp <= 0:
+                            print(f"\n{name} has won!")
+                        input()
+                        s = ("You make it out of the cave with the gem in hand!\n 
+                              You get to the exit only to see the king's army waiting for you.\n 
+                              There is no fighting your way out of this.\n You relenquish the gem 
+                              to the commander and sadly walk away.\n You're not rich but, you still 
+                              have your head.")
+
+                    else:
+                        s = ("You head out of the chamber with a sense of loss a regret.\n "
+                             "As you cross the threshold, the small chamber caves in behind you.\n"
+                             "Good thing you didn't linger in there much longer!")
+                        for character in s:
+                            sys.stdout.write(character)
+                            sys.stdout.flush()
+                            time.sleep(c)
+                        clear()
+
+                        s = ("As the echos stop and the dust begins to settle, you realize that your vision is "
+                             "greatly reduced.\nYou have become disoriented, will you proceed right or left? ")
+                        for character in s:
+                            sys.stdout.write(character)
+                            sys.stdout.flush()
+                            time.sleep(c)
+                        print()
+                        answer = input("(right/left) ")
+                        clear()
+                        if answer.startswith("r"):
+                            s = (
+                                "As you turn, you slip and fall. Your candle blows out and you hit your head really "
+                                "hard,\n"
+                                "then there is darkness. The spider from the entrance is alerted and finds you.\n"
+                                "You are weakend from the fall but, the spider is upon you! The fight is on!")
+                            for character in s:
+                                sys.stdout.write(character)
+                                sys.stdout.flush()
+                                time.sleep(c)
+                            clear()
+
+                            player_hp = 45
+                            comp_hp = 40
+
+                            print(f"{name} has {player_hp} health.")
+                            print(f"{enemy[1]} has {comp_hp} health.")
+                            time.sleep(2)
+                    
+                            while player_hp > 0 and comp_hp > 0:
+                                print(f"\n{turn}'s turn")
+                                time.sleep(2)
+                                if turn != 'Enemy':
+                                    player_attack = Player.attack()
+                                    print(f"{name}'s Attack: {player_attack}")
+                                    comp_defense = Player.defense()
+                                    print(f"{enemy[1]}'s Defense: {comp_defense}")
+                                    if player_attack > comp_defense:
+                                        damage = Player.damage()
+                                        comp_hp = comp_hp - damage
+                                        time.sleep(2)
+                                        print(f"\n{name} just did {damage} damage!")
+                                        time.sleep(2)
+                                        print(f"\n{name} has {player_hp} health.")
+                                        print(f"The {enemy[1]} now has {comp_hp} health.")
+                                        time.sleep(2)
+                                        turn = 'Enemy'
+                                    else:
+                                        print(f"{name} missed the {enemy[1]}!")
+                                        time.sleep(2)
+                                        turn = 'Enemy'
+                                else:
+                                    comp_attack = Player.attack()
+                                    print(f"{enemy[1]}'s Attack: {comp_attack}")
+                                    player_defense = Player.defense()
+                                    print(f"{name}'s Defense: {player_defense}")
+                                    if comp_attack > player_defense:
+                                        damage = Player.damage()
+                                        player_hp = player_hp - damage
+                                        time.sleep(2)
+                                        print(f"\n{enemy[1]} just did {damage} damage!")
+                                        time.sleep(2)
+                                        print(f"\n{enemy[1]} has {comp_hp} health.")
+                                        print(f"The {name} now has {player_hp} health.")
+                                        time.sleep(2)
+                                        turn = name
+                                    else:
+                                        print(f"Enemy missed {name}!")
+                                        turn = name
+                            if player_hp <= 0:
+                                print("\nThe Enemy has won!"
+                                    "\nGame Over")
+                                input()
+                                break
+                            elif comp_hp <= 0:
+                                print(f"\n{name} has won!")
+                            input()
+
+                        else:
+                            s = (
+                                "As you are moving deeper into the cave, you feel a slight breeze just before you "
+                                "fall into a deep cavern\n"
+                                "and everything goes black.\n"
+                                "You Loose!")
+                            for character in s:
+                                sys.stdout.write(character)
+                                sys.stdout.flush()
+                                time.sleep(c)
+                                break
+                            clear()
+
+                elif answer.startswith("l"):
+                    s = ("You continue deeper into the cave, the air gets more stale and cold as you proceed.\n"
+                         "You realize that it is very quiet and still and, except for your candle, there is no light.")
+                    for character in s:
+                        sys.stdout.write(character)
+                        sys.stdout.flush()
+                        time.sleep(c)
+                    print()
+                    s = "Do you wish to continue? "
+                    for character in s:
+                        sys.stdout.write(character)
+                        sys.stdout.flush()
+                        time.sleep(c)
+                    print()
+                    answer = input("(yes/no)").lower().strip()
+                    clear()
+
+                    if answer.startswith("y"):
+                        s = ("You decide to continue deeper into the cave, mindful of the 3/4 of a candle remaining.\n"
+                             "As you walk down the dark, damp, subterranean corridor, you see a glint of "
+                             "metal up ahead.\n"
+                             "Do you continue on? ")
+                        for character in s:
+                            sys.stdout.write(character)
+                            sys.stdout.flush()
+                            time.sleep(c)
+                        print()
+                        answer = input("(yes/no)")
+                        clear()
+                        if answer.startswith("y"):
+                            s = ("As you slowly move towards the shiny object, you begin to see\n"
+                                 "the outline of a skeleton holding a sword and a shield.\n"
+                                 "There is also really old leather armor and helmet hanging off the bones of the "
+                                 "'retired' hero.")
+                            for character in s:
+                                sys.stdout.write(character)
+                                sys.stdout.flush()
+                                time.sleep(c)
+                            print()
+                            s = "Do you take any of the items off of the skeleton? "
+                            for character in s:
+                                sys.stdout.write(character)
+                                sys.stdout.flush()
+                                time.sleep(c)
+                            print()
+                            answer = input("(yes/no)")
+                            clear()
+                            if answer.startswith("y"):
+                                s = "Do you take sword and shield or the armor? "
+                                for character in s:
+                                    sys.stdout.write(character)
+                                    sys.stdout.flush()
+                                    time.sleep(c)
+                                print()
+                                answer = input("(sword/armor)")
+                                clear()
+                                if answer.startswith("s"):
+                                    s = (
+                                        "You grab the sword and shield, move past the skeleton and continue on "
+                                        "through the cave.\n"
+                                        "You notice that your candle is about halfway gone as you step into a large "
+                                        "chamber.\n"
+                                        "You hold your candle up high to get a better view, and another giant spider "
+                                        "comes out of the darkness, this one looks older and more dangerous than the others.\n")
+                                    for character in s:
+                                        sys.stdout.write(character)
+                                        sys.stdout.flush()
+                                        time.sleep(1.5)
+                                    input()
+                                    clear()
+
+                                    player_hp = 50
+                                    comp_hp = 60
+
+                                    print(f"{name} has {player_hp} health.")
+                                    print(f"{enemy[2]} has {comp_hp} health.")
+                                    time.sleep(2)
+                            
+                                    while player_hp > 0 and comp_hp > 0:
+                                        print(f"\n{turn}'s turn")
+                                        time.sleep(2)
+                                        if turn != 'Enemy':
+                                            player_attack = Player.attack()
+                                            print(f"{name}'s Attack: {player_attack}")
+                                            comp_defense = Player.defense()
+                                            print(f"{enemy[2]}'s Defense: {comp_defense}")
+                                            if player_attack > comp_defense:
+                                                damage = Player.damage()
+                                                comp_hp = comp_hp - damage
+                                                time.sleep(2)
+                                                print(f"\n{name} just did {damage} damage!")
+                                                time.sleep(2)
+                                                print(f"\n{name} has {player_hp} health.")
+                                                print(f"The {enemy[2]} now has {comp_hp} health.")
+                                                time.sleep(2)
+                                                turn = 'Enemy'
+                                            else:
+                                                print(f"{name} missed the {enemy[2]}!")
+                                                time.sleep(2)
+                                                turn = 'Enemy'
+                                        else:
+                                            comp_attack = Player.attack()
+                                            print(f"{enemy[2]}'s Attack: {comp_attack}")
+                                            player_defense = Player.defense()
+                                            print(f"{name}'s Defense: {player_defense}")
+                                            if comp_attack > player_defense:
+                                                damage = Player.damage()
+                                                player_hp = player_hp - damage
+                                                time.sleep(2)
+                                                print(f"\n{enemy[2]} just did {damage} damage!")
+                                                time.sleep(2)
+                                                print(f"\n{enemy[2]} has {comp_hp} health.")
+                                                print(f"The {name} now has {player_hp} health.")
+                                                time.sleep(2)
+                                                turn = name
+                                            else:
+                                                print(f"Enemy missed {name}!")
+                                                turn = name
+                                    if player_hp <= 0:
+                                        print("\nThe Enemy has won!"
+                                            "\nGame Over")
+                                        input()
+                                        break
+                                    elif comp_hp <= 0:
+                                        print(f"\n{name} has won!")
+                                    input()
+
+                                    s = (
+                                        "You instinctively raise your shield to defend and stab forward with your "
+                                        "sword.\n"
+                                        "The shield deflects the claws of the spider and the tip of the sword "
+                                        "penetrates into it's chest,\n"
+                                        " and it falls over dead beside you.")
+                                    for character in s:
+                                        sys.stdout.write(character)
+                                        sys.stdout.flush()
+                                        time.sleep(1.5)
+                                    clear()
+                                    s = (
+                                        "As you get up and look around, you see that there are precious metals and "
+                                        "jewels scattered all around.\n"
+                                        "You also see that there is a dot of sunlight down a long corridor up ahead.\n"
+                                        "You gather up all that you can carry and as you exit the cave, it collapses "
+                                        "behind you.\n"
+                                        "That should be enough treasure and adventure to last the rest of your life!\n")
+                                    for character in s:
+                                        sys.stdout.write(character)
+                                        sys.stdout.flush()
+                                        time.sleep(1.5)
+                                    clear()
+                                    s = "YOU WIN!"
+                                    for character in s:
+                                        sys.stdout.write(character)
+                                        sys.stdout.flush()
+                                        time.sleep(2)
+                                    clear()
+                                else:
+                                    s = (
+                                        "As you get the armor on, you begin to feel movement under it. Before you can "
+                                        "remove any of it,\n"
+                                        "a swarm of spiderlings begin to bite you...")
+                                    for character in s:
+                                        sys.stdout.write(character)
+                                    sys.stdout.flush()
+                                    time.sleep(1.5)
+                                    clear()
+
+                                    player_hp = 50
+                                    comp_hp = 30
+
+                                    print(f"{name} has {player_hp} health.")
+                                    print(f"{enemy[0]} has {comp_hp} health.")
+                                    time.sleep(2)
+                            
+                                    while player_hp > 0 and comp_hp > 0:
+                                        print(f"\n{turn}'s turn")
+                                        time.sleep(2)
+                                        if turn != 'Enemy':
+                                            player_attack = Player.attack()
+                                            print(f"{name}'s Attack: {player_attack}")
+                                            comp_defense = Player.defense()
+                                            print(f"{enemy[0]}'s Defense: {comp_defense}")
+                                            if player_attack > comp_defense:
+                                                damage = Player.damage()
+                                                comp_hp = comp_hp - damage
+                                                time.sleep(2)
+                                                print(f"\n{name} just did {damage} damage!")
+                                                time.sleep(2)
+                                                print(f"\n{name} has {player_hp} health.")
+                                                print(f"The {enemy[0]} now has {comp_hp} health.")
+                                                time.sleep(2)
+                                                turn = 'Enemy'
+                                            else:
+                                                print(f"{name} missed the {enemy[0]}!")
+                                                time.sleep(2)
+                                                turn = 'Enemy'
+                                        else:
+                                            comp_attack = Player.attack()
+                                            print(f"{enemy[0]}'s Attack: {comp_attack}")
+                                            player_defense = Player.defense()
+                                            print(f"{name}'s Defense: {player_defense}")
+                                            if comp_attack > player_defense:
+                                                damage = Player.damage()
+                                                player_hp = player_hp - damage
+                                                time.sleep(2)
+                                                print(f"\n{enemy[0]} just did {damage} damage!")
+                                                time.sleep(2)
+                                                print(f"\n{enemy[0]} has {comp_hp} health.")
+                                                print(f"The {name} now has {player_hp} health.")
+                                                time.sleep(2)
+                                                turn = name
+                                            else:
+                                                print(f"Enemy missed {name}!")
+                                                turn = name
+                                    if player_hp <= 0:
+                                        print("\nThe Enemy has won!"
+                                            "\nGame Over")
+                                        input()
+                                        break
+                                    elif comp_hp <= 0:
+                                        print(f"\n{name} has won!")
+                                    input()
+
+                            else:
+                                s = (
+                                    "You move past the skeleton and continue on through the cave. You notice that "
+                                    "your candle is about\n"
+                                    "halfway gone as you step into a large chamber. As you hold your candle up high "
+                                    "to get a better view,\n"
+                                    "a giant spider comes out of the darkness and, with no way to defend yourself, "
+                                    "it attacks you. You see\n"
+                                    "fangs, then there is darkness.\n")
+                                for character in s:
+                                    sys.stdout.write(character)
+                                    sys.stdout.flush()
+                                    time.sleep(c)
+                                print()
+                                s = "You Loose!\n"
+                                for character in s:
+                                    sys.stdout.write(character)
+                                    sys.stdout.flush()
+                                    time.sleep(1.5)
+                                clear()
+
+                    else:
+                        s = (
+                            "As you turn, you slip and fall. Your candle blows out and you hit your head really hard. "
+                            "Everything goes dark.\n"
+                            "\n"
+                            "You Loose!")
+                        for character in s:
+                            sys.stdout.write(character)
+                            sys.stdout.flush()
+                            time.sleep(1.5)
+                        clear()
+
+            else:
+                s = "Sorry to see you go! (good riddance)"
+                for character in s:
+                    sys.stdout.write(character)
+                    sys.stdout.flush()
+                    time.sleep(2)
+                clear()
+                break
+
+        else:
+            s = "That's too bad!"
+            for character in s:
+                sys.stdout.write(character)
+                sys.stdout.flush()
+                time.sleep(2)
+            clear()
+            break
+
+s = "Thank you for playing!"
+for character in s:
+    sys.stdout.write(character)
+    sys.stdout.flush()
+    time.sleep(2)
+clear()
